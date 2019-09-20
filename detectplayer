@@ -1,0 +1,58 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.UI;
+using UnityEngine;
+
+
+
+public class GameController : MonoBehaviour
+{
+    public GameObject player;
+
+    private Vector3 player_position;
+
+    public GameObject enemy;
+
+    private Vector3 enemy_position;
+
+    public double max_range;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        player_position = player.transform.position;
+        enemy_position = enemy.transform.position;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        movePlayer();
+        detectPlayer();
+    }
+
+    void movePlayer()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            player.transform.position += Vector3.left * 5f;
+        }
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            player.transform.position += Vector3.right * 5f;
+        }
+    }
+
+    public void detectPlayer()
+    {
+        //calculate the distance between the player and the enemy
+        var heading = enemy_position - player_position; 
+
+        if (heading.sqrMagnitude < max_range * max_range)
+        {
+            //change the color of the enemy
+            var rend = enemy.GetComponent<Image>();       
+            rend.material.SetColor("_Color", Color.red);
+        }
+    }
+}
