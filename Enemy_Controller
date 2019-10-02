@@ -6,12 +6,17 @@ using UnityEngine.UI;
 
 public class EnemyController : MonoBehaviour
 {
+    //Create an empty object that has a BoxCollider2D and name it Boundary 
+    //Make that a prefab and create a second boundary as a child to the first boundary so they move together.
+    //In the player script, use the code: Physics2D.IgnoreCollision(Boundary.GetComponent<Collider2D>(), GetComponent<Collider2D>()); to ignore the boundary
+    //Both the player and the enemy need their BoxColliders to be checked under 'IsTrigger'
+    
     public GameObject player;
 
     public GameObject enemy;
 
-    public Rigidbody2D bullet;
-
+    public Rigidbody2D bullet; //Create a game object with a Rigidbody2D and BoxCollider2D. 
+                               //Reference the bullet's rigidbody in the inspector for the enemy game object
     public int direction;
 
     public int move_speed;
@@ -30,21 +35,21 @@ public class EnemyController : MonoBehaviour
 
     void patrol()
     {
-        RaycastHit2D findPlayer = Physics2D.Raycast(transform.position, new Vector2(direction, 0));
-        enemy.GetComponent<Rigidbody2D>().velocity = new Vector2(direction, 0) * move_speed;
+        //Make sure 'Queries Start In Colliders' is unchecked under Project Settings
+        RaycastHit2D findPlayer = Physics2D.Raycast(transform.position, new Vector2(direction, 0)); //Casts out a ray to look for a collider
+        enemy.GetComponent<Rigidbody2D>().velocity = new Vector2(direction, 0) * move_speed;        
 
         if (findPlayer.distance < distance)
         {
             flip();
-            Debug.Log("Flip!");
         }
         
     }
-    void flip()
+    void flip() //with this 'direction' is stored for future reference.
     {
         if (direction > 0)
         {
-            direction = -1;
+            direction = -1; 
         }
         else
         {
@@ -53,7 +58,7 @@ public class EnemyController : MonoBehaviour
 
 
     }
-
+    //There is no longer any need for the detectPlayer function in the player script.
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.tag == "Player")
@@ -69,9 +74,8 @@ public class EnemyController : MonoBehaviour
     }
     void shoot()
     {
-        Debug.Log("You've been shot.");
-        Rigidbody2D shot = Instantiate(bullet,transform.position, transform.rotation);
+        Rigidbody2D shot = Instantiate(bullet,transform.position, transform.rotation); //Materializes bullet
 
-        shot.velocity = new Vector2(direction, 0) * 100;
+        shot.velocity = new Vector2(direction, 0) * 100; //shoots bullet
     }
 }
