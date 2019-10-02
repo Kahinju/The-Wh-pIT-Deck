@@ -1,0 +1,77 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class EnemyController : MonoBehaviour
+{
+    public GameObject player;
+
+    public GameObject enemy;
+
+    public Rigidbody2D bullet;
+
+    public int direction;
+
+    public int move_speed;
+
+    public int distance;
+
+    void Start()
+    {
+
+    }
+
+    void Update()
+    {
+        patrol();
+    }
+
+    void patrol()
+    {
+        RaycastHit2D findPlayer = Physics2D.Raycast(transform.position, new Vector2(direction, 0));
+        enemy.GetComponent<Rigidbody2D>().velocity = new Vector2(direction, 0) * move_speed;
+
+        if (findPlayer.distance < distance)
+        {
+            flip();
+            Debug.Log("Flip!");
+        }
+        
+    }
+    void flip()
+    {
+        if (direction > 0)
+        {
+            direction = -1;
+        }
+        else
+        {
+            direction = 1;
+        }
+
+
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "Player")
+        {
+            Debug.Log("Time to shoot");
+            shoot();
+            enemy.GetComponent<Image>().material.SetColor("_Color", Color.red);
+        }
+    }
+    void OnTriggerExit2D(Collider2D col)
+    {
+        enemy.GetComponent<Image>().material.SetColor("_Color", Color.cyan);
+    }
+    void shoot()
+    {
+        Debug.Log("You've been shot.");
+        Rigidbody2D shot = Instantiate(bullet,transform.position, transform.rotation);
+
+        shot.velocity = new Vector2(direction, 0) * 100;
+    }
+}
