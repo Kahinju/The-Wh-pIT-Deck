@@ -1,0 +1,161 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class PlayerController : MonoBehaviour
+{
+    //Make sure to create a Hidden Player tag.
+    public GameObject player;//the white square in Unity
+
+    private Vector3 player_position;//stores the player position.
+
+    public float player_ypos;
+
+    public Material mat_player_def;
+
+    public Material mat_player_hide;
+
+    public Material mat_player_crouch;
+
+    //controls the height if a charcter's jump
+    public float maxBound, minBound;
+
+    private bool is_crouched;
+
+    private bool is_hiding;
+
+    //tracks the discoverability of the player at any given moment (from 0:fully hidden to 10:fully visible)
+    private int visibility_score;
+
+    public GameObject enemy;
+
+    public GameObject Boundary;
+
+    public GameObject Bullet;
+
+    private BoxCollider2D enemy_collider;
+
+    private BoxCollider2D player_collider;
+
+
+
+
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        // Initialize the players start position
+        player_position = transform.position;
+
+        player.GetComponent<Image>().material.SetColor("_Color", Color.green);
+
+        enemy_collider = enemy.GetComponent<BoxCollider2D>() as BoxCollider2D;
+
+        player_collider = player.GetComponent<BoxCollider2D>() as BoxCollider2D;
+
+        Physics2D.IgnoreCollision(Boundary.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+    }
+
+
+
+    // Update is called once per frame
+    void Update()
+    {
+        movePlayer();
+
+        changePlayerColor();
+
+        jumpPlayer();
+
+        //detectPlayer();
+
+    }
+
+    private void FixedUpdate()
+    {
+        player_ypos = Input.GetAxis("Horizontal");
+        gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(player_ypos * 10, gameObject.GetComponent<Rigidbody2D>().velocity.y);
+        //keeps player avatar in boundary
+        //if (player_transform.position.x < minBound && player_xpos < 0)
+        //  player_xpos = 0;
+
+        //else if (player_transform.position.x > maxBound && player_xpos > 0)
+        //  player_xpos = 0;
+    }
+
+    void movePlayer()
+    {
+        //if (Input.GetKey(KeyCode.LeftArrow))
+        //{
+        //    player.transform.position += Vector3.left * .50f;
+        //}
+
+        //if (Input.GetKey(KeyCode.RightArrow))
+        //{
+        //    player.transform.position += Vector3.right * .50f;
+        //}
+    }
+
+    void changePlayerColor()
+    {
+        if (Input.GetKey(KeyCode.C))
+        {
+            print("C is pressed!");
+
+            //player.GetComponent<MeshRenderer>().material = mat_player_crouch;
+            //player.gameObject.GetComponent<Renderer>().material.color = Color.blue;
+            gameObject.tag = "Hidden Player";
+            player.GetComponent<Image>().material.SetColor("_Color", Color.blue);
+            
+        }
+        if (Input.GetKeyUp(KeyCode.C))
+        {
+            print("C is released! No longer crouching.");
+            gameObject.tag = "Player";
+            player.GetComponent<Image>().material.SetColor("_Color", Color.green);
+        }
+
+        if (Input.GetKey(KeyCode.Q))
+        {
+            print("Q is pressed! Hiding in BG.");
+
+            player.GetComponent<Image>().material.SetColor("_Color", Color.grey);
+        }
+
+
+        if (Input.GetKeyUp(KeyCode.Q))
+        {
+            print("Q is released! No longer hiding.");
+
+            player.GetComponent<Image>().material.SetColor("_Color", Color.green);
+        }
+
+
+
+    }
+
+    void jumpPlayer()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            //parabola physics?!
+            //player.transform.position += Vector3.up * 1;
+        }
+    }
+    //void detectPlayer()
+    //{
+    //    bool test = enemy_collider.IsTouching(player_collider);
+
+    //    if (test)
+    //    {
+    //        enemy.GetComponent<Image>().material.SetColor("_Color", Color.red);
+    //        //var rend = enemy.GetComponent<Image>();
+    //        //rend.material.SetColor("_Color", Color.red);
+    //    }
+    //    if (!test)
+    //    {
+    //        enemy.GetComponent<Image>().material.SetColor("_Color", Color.cyan);
+    //    }
+    //}
+}
