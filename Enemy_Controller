@@ -10,7 +10,8 @@ public class EnemyController : MonoBehaviour
     //Make that a prefab and create a second boundary as a child to the first boundary so they move together.
     //In the player script, use the code: Physics2D.IgnoreCollision(Boundary.GetComponent<Collider2D>(), GetComponent<Collider2D>()); to ignore the boundary
     //Both the player and the enemy need their BoxColliders to be checked under 'IsTrigger'
-    
+    //Make sure to offset the enemy's collider to the right, start the enemy facing right.
+
     public GameObject player;
 
     public GameObject enemy;
@@ -22,6 +23,8 @@ public class EnemyController : MonoBehaviour
     public int move_speed;
 
     public int distance;
+
+    public int bullet_speed;
 
     void Start()
     {
@@ -41,19 +44,25 @@ public class EnemyController : MonoBehaviour
 
         if (findPlayer.distance < distance)
         {
-            flip();
+            flipEnemy();
         }
         
     }
-    void flip() //with this 'direction' is stored for future reference.
+    void flipEnemy() //with this 'direction' is stored for future reference.
     {
         if (direction > 0)
         {
-            direction = -1; 
+            direction = -1;
+            Vector2 localScale = gameObject.transform.localScale;
+            localScale.x *= -1;
+            transform.localScale = localScale;
         }
         else
         {
             direction = 1;
+            Vector2 localScale = gameObject.transform.localScale;
+            localScale.x *= -1;
+            transform.localScale = localScale;
         }
 
 
@@ -76,6 +85,6 @@ public class EnemyController : MonoBehaviour
     {
         Rigidbody2D shot = Instantiate(bullet,transform.position, transform.rotation); //Materializes bullet
 
-        shot.velocity = new Vector2(direction, 0) * 100; //shoots bullet
+        shot.velocity = new Vector2(direction, 0) * bullet_speed; //shoots bullet
     }
 }
