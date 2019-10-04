@@ -105,14 +105,14 @@ public class PlayerController : MonoBehaviour
 
             //player.GetComponent<MeshRenderer>().material = mat_player_crouch;
             //player.gameObject.GetComponent<Renderer>().material.color = Color.blue;
-            gameObject.tag = "Hidden Player";
+            gameObject.tag = "Hidden Player"; //NEW, make sure to create a Hidden Player tag in the inspector
             player.GetComponent<Image>().material.SetColor("_Color", Color.blue);
             
         }
         if (Input.GetKeyUp(KeyCode.C))
         {
             print("C is released! No longer crouching.");
-            gameObject.tag = "Player";
+            gameObject.tag = "Player"; //NEW
             player.GetComponent<Image>().material.SetColor("_Color", Color.green);
         }
 
